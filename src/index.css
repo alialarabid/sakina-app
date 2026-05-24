@@ -1,56 +1,76 @@
 /* ------------------------------------------------------------------ *
- * Sakina — design tokens & base styles
- * Calm, paper-warm light theme + deep-night dark theme.
- * Arabic is set in Amiri (naskh, full harakat); UI in a system sans.
+ * Sakina — design tokens & base
+ * Warm paper / deep night, a characterful serif (Fraunces) for display,
+ * Amiri for Arabic, and a translucent time-of-day tint that overlays the
+ * base in either theme.
  * ------------------------------------------------------------------ */
 
 @import '@fontsource/amiri/400.css';
 @import '@fontsource/amiri/700.css';
+@import '@fontsource-variable/fraunces';
 
 :root {
-  /* Warm paper light theme (default) */
-  --bg: #f3ede1;
-  --surface: #fbf7ef;
-  --surface-2: #f0e8d8;
-  --ink: #2b2620;
-  --ink-2: #5d564b;
-  --ink-3: #908779;
-  --hairline: #e3d9c6;
-  --accent: #0f6b53;        /* emerald */
-  --accent-soft: #0f6b5314;
-  --gold: #a8823f;
-  --shadow: 0 1px 2px rgba(43, 38, 32, 0.04), 0 8px 24px rgba(43, 38, 32, 0.06);
+  /* Warm paper (light, default) */
+  --bg: #f1ebdf;
+  --surface: #fdfaf3;
+  --surface-2: #ece3d2;
+  --ink: #2a241c;
+  --ink-2: #685f50;
+  --ink-3: #9a9082;
+  --hairline: #e4d9c4;
+  --accent: #0e6b54;
+  --accent-deep: #0a5341;
+  --accent-soft: rgba(14, 107, 84, 0.09);
+  --gold: #a9802f;
+  --gold-soft: rgba(169, 128, 47, 0.12);
+  --shadow: 0 1px 2px rgba(42, 36, 28, 0.05), 0 10px 30px rgba(42, 36, 28, 0.07);
+  --shadow-lg: 0 2px 6px rgba(42, 36, 28, 0.06), 0 24px 60px rgba(42, 36, 28, 0.12);
 
   --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-display: 'Fraunces Variable', 'Fraunces', Georgia, serif;
   --font-ar: 'Amiri', 'Scheherazade New', 'Times New Roman', serif;
 
   --r-sm: 10px;
   --r-md: 16px;
-  --r-lg: 22px;
+  --r-lg: 24px;
+  --r-xl: 32px;
 
-  --ar-scale: 1;            /* adjusted by the font-size setting */
+  --ar-scale: 1;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
 
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* time-of-day tint (overwritten per [data-daypart]) */
+  --daytint: rgba(150, 190, 170, 0.22);
+  --daytint-2: rgba(169, 128, 47, 0.10);
 }
 
 [data-theme='dark'] {
-  --bg: #11151a;
-  --surface: #181d24;
-  --surface-2: #1f262f;
-  --ink: #ece4d6;
-  --ink-2: #b3ab9c;
-  --ink-3: #7e776b;
-  --hairline: #262e38;
-  --accent: #5fb89a;
-  --accent-soft: #5fb89a1f;
-  --gold: #cda85f;
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 10px 30px rgba(0, 0, 0, 0.28);
+  --bg: #0e1217;
+  --surface: #161c23;
+  --surface-2: #1e252e;
+  --ink: #efe7d7;
+  --ink-2: #ada592;
+  --ink-3: #7b7466;
+  --hairline: #28303a;
+  --accent: #5cba9b;
+  --accent-deep: #79c9ae;
+  --accent-soft: rgba(92, 186, 155, 0.13);
+  --gold: #cfa85f;
+  --gold-soft: rgba(207, 168, 95, 0.14);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.25), 0 12px 34px rgba(0, 0, 0, 0.32);
+  --shadow-lg: 0 2px 8px rgba(0, 0, 0, 0.3), 0 28px 70px rgba(0, 0, 0, 0.45);
 }
 
-* { box-sizing: border-box; }
+/* Time-of-day tints — translucent, so they read on both themes */
+[data-daypart='dawn']  { --daytint: rgba(243, 168, 120, 0.30); --daytint-2: rgba(214, 150, 170, 0.16); }
+[data-daypart='day']   { --daytint: rgba(120, 178, 150, 0.22); --daytint-2: rgba(169, 128, 47, 0.10); }
+[data-daypart='dusk']  { --daytint: rgba(212, 130, 96, 0.30);  --daytint-2: rgba(120, 96, 158, 0.22); }
+[data-daypart='night'] { --daytint: rgba(72, 96, 158, 0.30);   --daytint-2: rgba(40, 54, 92, 0.30); }
 
+* { box-sizing: border-box; }
 html, body, #root { height: 100%; }
 
 body {
@@ -61,26 +81,20 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overscroll-behavior-y: none;
-  transition: background 0.4s var(--ease), color 0.4s var(--ease);
+  transition: background 0.5s var(--ease), color 0.5s var(--ease);
 }
 
-button {
-  font-family: inherit;
-  color: inherit;
-  border: none;
-  background: none;
-  cursor: pointer;
-}
+button { font-family: inherit; color: inherit; border: none; background: none; cursor: pointer; }
 
-/* Arabic text blocks — always RTL, generous line height for harakat */
+h1, h2, h3 { font-family: var(--font-display); font-weight: 500; letter-spacing: -0.01em; }
+
 .ar {
   font-family: var(--font-ar);
   direction: rtl;
-  line-height: 2.1;
+  line-height: 2.05;
   font-weight: 400;
 }
 
-/* Respect users who prefer less motion */
 @media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
 }

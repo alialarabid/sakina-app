@@ -1,11 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import Home from './screens/Home.jsx'
 import Adhkar from './screens/Adhkar.jsx'
 import Duas from './screens/Duas.jsx'
 import Tasbih from './screens/Tasbih.jsx'
 import Settings from './screens/Settings.jsx'
+import { daypart } from './lib/time.js'
 import './App.css'
 
 const TABS = [
+  { id: 'home', label: 'Home', icon: HomeIcon, Screen: Home },
   { id: 'adhkar', label: 'Adhkar', icon: SunMoonIcon, Screen: Adhkar },
   { id: 'duas', label: 'Duʼa', icon: HandsIcon, Screen: Duas },
   { id: 'tasbih', label: 'Tasbih', icon: BeadsIcon, Screen: Tasbih },
@@ -13,13 +16,24 @@ const TABS = [
 ]
 
 export default function App() {
-  const [tab, setTab] = useState('adhkar')
+  const [tab, setTab] = useState('home')
   const Active = TABS.find((t) => t.id === tab).Screen
+
+  // Keep the time-of-day atmosphere fresh.
+  useEffect(() => {
+    const apply = () => document.documentElement.setAttribute('data-daypart', daypart())
+    apply()
+    const t = setInterval(apply, 60_000)
+    return () => clearInterval(t)
+  }, [])
+
+  // Let any screen request a tab change (e.g. Home quick links).
+  const go = (id) => setTab(id)
 
   return (
     <div className="app">
       <main className="app-main" key={tab}>
-        <Active />
+        <Active go={go} />
       </main>
 
       <nav className="tabbar" aria-label="Sections">
@@ -33,7 +47,7 @@ export default function App() {
               onClick={() => setTab(t.id)}
               aria-current={active ? 'page' : undefined}
             >
-              <Icon active={active} />
+              <Icon />
               <span>{t.label}</span>
             </button>
           )
@@ -43,7 +57,14 @@ export default function App() {
   )
 }
 
-/* --- Minimal line icons (stroke = currentColor) --- */
+/* --- line icons --- */
+function HomeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 11.5 12 4l8 7.5M6 10v9h12v-9" />
+    </svg>
+  )
+}
 function SunMoonIcon() {
   return (
     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
