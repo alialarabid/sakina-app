@@ -1,0 +1,16 @@
+modules = ["nodejs-20"]
+run = "npm run dev"
+entrypoint = "src/main.jsx"
+
+[env]
+NODE_ENV = "development"
+
+[[ports]]
+localPort = 5173
+externalPort = 80
+
+[deployment]
+build = ["npm", "run", "build"]
+run = ["npm", "run", "preview"]
+deploymentTarget = "static"
+publicDir = "dist"

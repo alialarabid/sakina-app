@@ -1,0 +1,23 @@
+{
+  "name": "sakina",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Sakina — a calm, ad-free companion for adhkar, du'a, and dhikr.",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "fetch-content": "node scripts/fetch-content.mjs"
+  },
+  "dependencies": {
+    "@fontsource/amiri": "^5.0.13",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.0.7",
+    "vite-plugin-pwa": "^0.21.1"
+  }
+}

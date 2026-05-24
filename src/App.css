@@ -1,0 +1,331 @@
+/* ============================ Layout ============================ */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.app-main {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: calc(var(--safe-top) + 8px) 18px calc(96px + var(--safe-bottom));
+  animation: fade 0.35s var(--ease);
+}
+
+@keyframes fade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---- Screen header ---- */
+.screen-head { padding: 18px 2px 8px; }
+.screen-head h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.screen-head p {
+  margin: 6px 0 0;
+  color: var(--ink-3);
+  font-size: 14px;
+}
+
+/* ============================ Tab bar ============================ */
+.tabbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: 640px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 8px 8px calc(8px + var(--safe-bottom));
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: saturate(140%) blur(16px);
+  -webkit-backdrop-filter: saturate(140%) blur(16px);
+  border-top: 1px solid var(--hairline);
+}
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 0;
+  font-size: 11px;
+  color: var(--ink-3);
+  transition: color 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.tab--active { color: var(--accent); }
+.tab:active { transform: scale(0.92); }
+
+/* ============================ Segmented toggle ============================ */
+.segment {
+  display: inline-flex;
+  background: var(--surface-2);
+  border-radius: 999px;
+  padding: 3px;
+  gap: 2px;
+}
+.segment button {
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-2);
+  transition: all 0.25s var(--ease);
+}
+.segment button.on {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+}
+
+/* ============================ Dhikr / Duʼa card ============================ */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  padding: 22px 20px;
+  box-shadow: var(--shadow);
+}
+.card + .card { margin-top: 14px; }
+
+.card .ar {
+  font-size: calc(26px * var(--ar-scale));
+  color: var(--ink);
+  margin: 0;
+}
+.card .translit {
+  margin: 14px 0 0;
+  color: var(--accent);
+  font-size: 15px;
+  font-style: italic;
+  line-height: 1.6;
+}
+.card .translation {
+  margin: 12px 0 0;
+  color: var(--ink-2);
+  font-size: 15.5px;
+  line-height: 1.65;
+}
+.card .meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--hairline);
+}
+.card .ref {
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+/* repeat pill / tap-to-count */
+.repeat {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  transition: transform 0.2s var(--ease), background 0.25s var(--ease);
+}
+.repeat:active { transform: scale(0.94); }
+.repeat.done {
+  background: var(--accent);
+  color: var(--surface);
+}
+
+/* ---- Adhkar progress ---- */
+.progress {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 2px;
+  background: linear-gradient(var(--bg) 70%, transparent);
+}
+.progress .bar {
+  flex: 1;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.progress .bar > span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: width 0.4s var(--ease);
+}
+.progress .count {
+  font-size: 13px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.done-banner {
+  text-align: center;
+  padding: 28px 16px;
+  margin-top: 8px;
+  color: var(--accent);
+}
+.done-banner .ar { font-size: calc(24px * var(--ar-scale)); }
+.done-banner p { margin: 6px 0 0; color: var(--ink-3); font-size: 14px; }
+
+/* ============================ Duʼa categories ============================ */
+.cat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+.cat {
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  padding: 16px;
+  transition: transform 0.2s var(--ease);
+}
+.cat:active { transform: scale(0.97); }
+.cat .cat-ar { font-family: var(--font-ar); direction: rtl; color: var(--gold); font-size: 19px; }
+.cat .cat-en { margin-top: 6px; font-size: 14.5px; font-weight: 600; }
+.cat .cat-n { margin-top: 4px; font-size: 12px; color: var(--ink-3); }
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 500;
+  padding: 6px 0;
+}
+
+/* ============================ Tasbih ============================ */
+.tasbih {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: 8px;
+}
+.tasbih .phrase-ar {
+  font-family: var(--font-ar);
+  direction: rtl;
+  font-size: 38px;
+  color: var(--ink);
+  min-height: 56px;
+}
+.tasbih .phrase-en { color: var(--ink-3); font-size: 14px; margin-top: 2px; }
+
+.counter-btn {
+  margin: 26px 0;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 38%, var(--surface), var(--surface-2));
+  border: 1px solid var(--hairline);
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  transition: transform 0.12s var(--ease), box-shadow 0.2s var(--ease);
+  user-select: none;
+}
+.counter-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 0 0 8px var(--accent-soft);
+}
+
+.tasbih-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  max-width: 360px;
+}
+.chip {
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s var(--ease);
+}
+.chip.on { background: var(--accent); color: var(--surface); }
+.chip:active { transform: scale(0.95); }
+
+.daily-total { margin-top: 22px; color: var(--ink-3); font-size: 13px; font-variant-numeric: tabular-nums; }
+
+/* ---- Gratitude prompt ---- */
+.gratitude {
+  margin-top: 26px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.gratitude .label {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.gratitude p { margin: 10px 0 0; font-size: 16px; line-height: 1.6; color: var(--ink); }
+
+/* ============================ Settings ============================ */
+.setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 4px;
+  border-bottom: 1px solid var(--hairline);
+}
+.setting:last-of-type { border-bottom: none; }
+.setting .s-label { font-size: 15.5px; font-weight: 500; }
+.setting .s-sub { font-size: 13px; color: var(--ink-3); margin-top: 3px; }
+
+.note {
+  margin-top: 26px;
+  padding: 16px 18px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+.note strong { color: var(--ink); }
+
+.app-foot {
+  text-align: center;
+  color: var(--ink-3);
+  font-size: 12px;
+  margin-top: 28px;
+  line-height: 1.7;
+}
