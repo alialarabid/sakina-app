@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.alialarabid.sakina",
+      "sha256_cert_fingerprints": [
+        "EB:B9:B9:6C:01:34:F0:86:F0:6D:EE:67:95:5C:6B:AF:0E:26:B2:3B:BB:87:CB:FF:4E:A3:A3:35:07:25:79:C6"
+      ]
+    }
+  }
+]
