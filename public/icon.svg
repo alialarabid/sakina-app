@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <!-- Maskable app icon: full-bleed emerald field with safe-zone padding -->
-  <rect width="512" height="512" fill="#0f6b53"/>
-  <circle cx="270" cy="256" r="132" fill="#f7f3ec"/>
-  <circle cx="322" cy="232" r="112" fill="#0f6b53"/>
-  <circle cx="168" cy="170" r="14" fill="#d8b977"/>
-</svg>
