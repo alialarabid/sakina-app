@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=Amiri:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+      * { margin: 0; box-sizing: border-box; }
+      body { width: 1024px; height: 500px; overflow: hidden; }
+      .banner {
+        width: 1024px; height: 500px; position: relative;
+        display: flex; align-items: center; gap: 56px;
+        padding: 0 84px;
+        background:
+          radial-gradient(120% 140% at 80% -10%, rgba(72,96,158,0.35), transparent 55%),
+          radial-gradient(90% 120% at 12% 110%, rgba(169,128,47,0.22), transparent 55%),
+          linear-gradient(135deg, #0e6b54, #0a4e3e 70%, #093f33);
+        color: #fdfaf3; overflow: hidden;
+      }
+      .pattern {
+        position: absolute; inset: 0; opacity: 0.10; color: #d8b977;
+        pointer-events: none;
+      }
+      .icon {
+        width: 232px; height: 232px; border-radius: 52px; flex-shrink: 0;
+        box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+      }
+      .copy { position: relative; }
+      .name { font-family: 'Fraunces', serif; font-weight: 500; font-size: 104px; line-height: 1; letter-spacing: -0.02em; }
+      .ar { font-family: 'Amiri', serif; font-size: 52px; color: #e6c98a; margin-top: 6px; direction: rtl; }
+      .tag { font-family: -apple-system, 'Segoe UI', sans-serif; font-size: 26px; color: rgba(253,250,243,0.82); margin-top: 22px; letter-spacing: 0.01em; }
+    </style>
+  </head>
+  <body>
+    <div class="banner">
+      <svg class="pattern" viewBox="0 0 1024 500" preserveAspectRatio="xMidYMid slice" fill="none" stroke="currentColor" stroke-width="1.4">
+        <g transform="translate(880,90)"><rect x="-70" y="-70" width="140" height="140"/><rect x="-70" y="-70" width="140" height="140" transform="rotate(45)"/><circle r="98"/></g>
+        <g transform="translate(120,440)"><rect x="-60" y="-60" width="120" height="120"/><rect x="-60" y="-60" width="120" height="120" transform="rotate(45)"/><circle r="84"/></g>
+      </svg>
+      <img class="icon" src="file:///Users/ali/Desktop/muslim-companion/public/icon-512.png" />
+      <div class="copy">
+        <div class="name">Sakina</div>
+        <div class="ar">سكينة</div>
+        <div class="tag">Morning &amp; evening adhkar · Du&#700;a · Dhikr</div>
+      </div>
+    </div>
+  </body>
+</html>
