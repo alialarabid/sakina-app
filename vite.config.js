@@ -24,6 +24,7 @@ export default defineConfig({
         orientation: 'portrait',
         scope: '/',
         start_url: '/',
+        prefer_related_applications: false,
         categories: ['lifestyle', 'education', 'books'],
         icons: [
           { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
@@ -37,9 +38,9 @@ export default defineConfig({
           { src: 'screenshots/tasbih.png', sizes: '1170x2532', type: 'image/png', form_factor: 'narrow', label: 'Tasbih counter' },
         ],
         shortcuts: [
-          { name: 'Morning & evening adhkar', short_name: 'Adhkar', url: '/?tab=adhkar', icons: [{ src: 'icon-192.png', sizes: '192x192' }] },
-          { name: 'Tasbih counter', short_name: 'Tasbih', url: '/?tab=tasbih', icons: [{ src: 'icon-192.png', sizes: '192x192' }] },
-          { name: 'Duʼa', short_name: 'Duʼa', url: '/?tab=duas', icons: [{ src: 'icon-192.png', sizes: '192x192' }] },
+          { name: 'Morning & evening adhkar', short_name: 'Adhkar', url: '/?tab=adhkar', icons: [{ src: 'icon-192.png', sizes: '192x192', type: 'image/png' }] },
+          { name: 'Tasbih counter', short_name: 'Tasbih', url: '/?tab=tasbih', icons: [{ src: 'icon-192.png', sizes: '192x192', type: 'image/png' }] },
+          { name: 'Duʼa', short_name: 'Duʼa', url: '/?tab=duas', icons: [{ src: 'icon-192.png', sizes: '192x192', type: 'image/png' }] },
         ],
       },
       workbox: {
