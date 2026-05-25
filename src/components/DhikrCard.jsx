@@ -1,3 +1,5 @@
+import ShareButton from './ShareButton.jsx'
+
 // One unit of remembrance: Arabic (always), optional English, source, and an
 // optional tap-to-count repeat pill. Text is never altered here.
 export default function DhikrCard({ item, showTranslation, counter }) {
@@ -14,21 +16,24 @@ export default function DhikrCard({ item, showTranslation, counter }) {
       <div className="meta">
         <span className="ref">Hisn al-Muslim</span>
 
-        {counter ? (
-          <button
-            className={'repeat' + (done ? ' done' : '')}
-            onClick={counter.onTap}
-            aria-label={`Repeated ${counter.count} of ${item.repeat}`}
-          >
-            {done ? '✓ ' : ''}
-            {counter.count} / {item.repeat}
-            {item.repeat > 1 ? '×' : ''}
-          </button>
-        ) : item.repeat > 1 ? (
-          <span className="repeat" aria-label={`Repeat ${item.repeat} times`}>
-            ×{item.repeat}
-          </span>
-        ) : null}
+        <div className="meta-actions">
+          <ShareButton item={item} />
+          {counter ? (
+            <button
+              className={'repeat' + (done ? ' done' : '')}
+              onClick={counter.onTap}
+              aria-label={`Repeated ${counter.count} of ${item.repeat}`}
+            >
+              {done ? '✓ ' : ''}
+              {counter.count} / {item.repeat}
+              {item.repeat > 1 ? '×' : ''}
+            </button>
+          ) : item.repeat > 1 ? (
+            <span className="repeat" aria-label={`Repeat ${item.repeat} times`}>
+              ×{item.repeat}
+            </span>
+          ) : null}
+        </div>
       </div>
     </article>
   )

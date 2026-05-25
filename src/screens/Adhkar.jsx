@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import data from '../data/adhkar.json'
 import CounterRing from '../components/CounterRing.jsx'
+import ShareButton from '../components/ShareButton.jsx'
 import { useSettings } from '../lib/settings.jsx'
 
 export default function Adhkar() {
@@ -60,7 +61,10 @@ export default function Adhkar() {
       <div className="reader-body" key={cur.id}>
         <p className="ar reader-ar" style={{ fontSize: `calc(27px * var(--ar-scale))` }}>{cur.arabic}</p>
         {showTranslation && cur.translation && <p className="reader-tr">{cur.translation}</p>}
-        <span className="reader-ref">Hisn al-Muslim</span>
+        <div className="reader-meta">
+          <span className="reader-ref">Hisn al-Muslim</span>
+          <ShareButton item={cur} />
+        </div>
       </div>
 
       <div className="reader-foot">

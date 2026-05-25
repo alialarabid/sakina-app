@@ -208,6 +208,21 @@
 .card .translation { margin: 14px 0 0; color: var(--ink-2); font-size: 15px; line-height: 1.65; }
 .card .meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--hairline); }
 .card .ref { font-size: 12.5px; color: var(--ink-3); }
+.meta-actions { display: flex; align-items: center; gap: 10px; }
+
+/* Share button */
+.share-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 999px;
+  color: var(--ink-3); background: var(--surface-2);
+  transition: transform 0.2s var(--ease), color 0.2s var(--ease);
+}
+.share-btn:active { transform: scale(0.9); }
+.share-btn:hover { color: var(--accent); }
+.share-copied { font-size: 11px; font-weight: 600; color: var(--accent); padding: 0 8px; }
+
+.reader-meta { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 16px; }
+.reader-meta .reader-ref { margin-top: 0; }
 .repeat {
   flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px;
   padding: 6px 13px; border-radius: 999px; background: var(--accent-soft);
