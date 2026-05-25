@@ -65,6 +65,8 @@ export default function Settings() {
       </div>
 
       <p className="app-foot">
+        <a href="/privacy.html" target="_blank" rel="noopener" style={{ color: 'var(--accent)' }}>Privacy</a>
+        <br /><br />
         Sakina · سكينة<br />
         Made as a sadaqah jariyah. May it benefit you.
       </p>
