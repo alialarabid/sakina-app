@@ -112,6 +112,51 @@
   display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
 }
 
+/* ============================ Prayer times (Home) ============================ */
+.prayer { margin-top: 14px; }
+
+.next-prayer {
+  display: grid; grid-template-columns: 1fr auto; column-gap: 12px;
+  padding: 18px 22px; border-radius: var(--r-lg) var(--r-lg) 0 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep)); color: #fff;
+}
+.np-label { grid-column: 1 / -1; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.82; margin-bottom: 4px; }
+.np-name { font-family: var(--font-display); font-size: 24px; font-weight: 500; }
+.np-time { grid-column: 2; grid-row: 2 / 4; align-self: center; font-size: 26px; font-weight: 300; font-variant-numeric: tabular-nums; }
+.np-count { font-size: 13px; opacity: 0.85; margin-top: 2px; }
+
+.prayer-list {
+  background: var(--surface); border: 1px solid var(--hairline); border-top: none;
+  border-radius: 0 0 var(--r-lg) var(--r-lg); padding: 6px 8px; box-shadow: var(--shadow);
+}
+.pr-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 14px; border-radius: 10px; font-size: 15px;
+}
+.pr-row .pr-time { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.pr-row.minor { opacity: 0.55; font-size: 13.5px; }
+.pr-row.next { background: var(--accent-soft); }
+.pr-row.next .pr-name, .pr-row.next .pr-time { color: var(--accent); font-weight: 600; }
+
+.prayer-prompt {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  margin-top: 14px; padding: 18px 20px; background: var(--surface);
+  border: 1px solid var(--hairline); border-radius: var(--r-lg); box-shadow: var(--shadow);
+}
+.pp-title { font-family: var(--font-display); font-size: 18px; }
+.pp-sub { font-size: 13px; color: var(--ink-3); margin-top: 3px; max-width: 32ch; }
+
+/* settings extras */
+.settings-section {
+  font-family: var(--font-ui); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gold); font-weight: 600; margin: 28px 4px 2px;
+}
+.select {
+  font-family: var(--font-ui); font-size: 14px; color: var(--ink);
+  background: var(--surface-2); border: 1px solid var(--hairline);
+  border-radius: 10px; padding: 8px 12px; max-width: 58%;
+}
+
 /* ============================ Counter ring ============================ */
 .ring {
   position: relative; display: inline-flex; align-items: center; justify-content: center;

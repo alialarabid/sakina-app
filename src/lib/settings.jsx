@@ -8,6 +8,10 @@ const DEFAULTS = {
   theme: 'system',   // 'light' | 'dark' | 'system'
   display: 'full',
   fontScale: 1,      // 0.9 – 1.4, multiplies Arabic size
+  // Prayer times
+  coords: null,      // { lat, lng } once the user shares location
+  calcMethod: 'UmmAlQura',
+  madhhab: 'shafi',  // 'shafi' | 'hanafi' (Asr calculation)
 }
 
 function resolveTheme(theme) {

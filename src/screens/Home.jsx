@@ -1,4 +1,5 @@
 import adhkar from '../data/adhkar.json'
+import PrayerTimes from '../components/PrayerTimes.jsx'
 import { greeting, adhkarMood, hijriDate, hijriDateAr, gregorianDate } from '../lib/time.js'
 
 // A calm, authentic dhikr to feature, rotating by day (from the verified set).
@@ -26,6 +27,8 @@ export default function Home({ go }) {
         </div>
         <p className="hero-greg">{gregorianDate()}</p>
       </section>
+
+      <PrayerTimes />
 
       <button className="primary-card" onClick={() => go('adhkar')}>
         <div>

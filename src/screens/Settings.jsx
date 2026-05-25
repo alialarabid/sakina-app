@@ -1,7 +1,20 @@
+import { useState } from 'react'
 import { useSettings } from '../lib/settings.jsx'
+import { CALC_METHODS, locate } from '../lib/prayer.js'
 
 export default function Settings() {
   const { settings, update } = useSettings()
+  const [locStatus, setLocStatus] = useState('idle')
+
+  const useMyLocation = async () => {
+    setLocStatus('locating')
+    try {
+      update({ coords: await locate() })
+      setLocStatus('done')
+    } catch (e) {
+      setLocStatus(e && e.code === 1 ? 'denied' : 'error')
+    }
+  }
 
   const clampScale = (next) => Math.min(1.4, Math.max(0.9, Math.round(next * 10) / 10))
 
@@ -48,6 +61,50 @@ export default function Settings() {
         <div className="segment">
           <button onClick={() => update({ fontScale: clampScale(settings.fontScale - 0.1) })} aria-label="Smaller">A−</button>
           <button onClick={() => update({ fontScale: clampScale(settings.fontScale + 0.1) })} aria-label="Larger">A+</button>
+        </div>
+      </div>
+
+      <h2 className="settings-section">Prayer times</h2>
+
+      <div className="setting">
+        <div>
+          <div className="s-label">Location</div>
+          <div className="s-sub">
+            {locStatus === 'locating' ? 'Locating…'
+              : locStatus === 'denied' ? 'Permission blocked — allow location in your browser'
+              : locStatus === 'error' ? "Couldn't get location — try again"
+              : settings.coords ? 'Location set' : 'Not set'}
+          </div>
+        </div>
+        <button className="link-btn" onClick={useMyLocation} disabled={locStatus === 'locating'}>
+          {settings.coords ? 'Update' : 'Use my location'}
+        </button>
+      </div>
+
+      <div className="setting">
+        <div>
+          <div className="s-label">Calculation method</div>
+          <div className="s-sub">How prayer times are computed</div>
+        </div>
+        <select
+          className="select"
+          value={settings.calcMethod}
+          onChange={(e) => update({ calcMethod: e.target.value })}
+        >
+          {Object.entries(CALC_METHODS).map(([k, label]) => (
+            <option key={k} value={k}>{label}</option>
+          ))}
+        </select>
+      </div>
+
+      <div className="setting">
+        <div>
+          <div className="s-label">Asr (madhhab)</div>
+          <div className="s-sub">Hanafi makes Asr later</div>
+        </div>
+        <div className="segment">
+          <button className={settings.madhhab === 'shafi' ? 'on' : ''} onClick={() => update({ madhhab: 'shafi' })}>Standard</button>
+          <button className={settings.madhhab === 'hanafi' ? 'on' : ''} onClick={() => update({ madhhab: 'hanafi' })}>Hanafi</button>
         </div>
       </div>
 
