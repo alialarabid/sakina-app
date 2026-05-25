@@ -15,8 +15,13 @@ const TABS = [
   { id: 'settings', label: 'Settings', icon: GearIcon, Screen: Settings },
 ]
 
+function initialTab() {
+  const t = new URLSearchParams(window.location.search).get('tab')
+  return TABS.some((x) => x.id === t) ? t : 'home'
+}
+
 export default function App() {
-  const [tab, setTab] = useState('home')
+  const [tab, setTab] = useState(initialTab)
   const Active = TABS.find((t) => t.id === tab).Screen
 
   // Keep the time-of-day atmosphere fresh.
