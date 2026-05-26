@@ -15,6 +15,26 @@ const PRAYERS = [
 const DAYS_AHEAD = 3        // schedule a rolling 3-day window
 const DHIKR_ID = 900
 
+// Fire a sample notification ~4s out so the user can confirm reminders work
+// without waiting for a prayer time. Returns true if scheduled.
+export async function sendTest() {
+  if (!isNative()) return false
+  try {
+    if (!(await ensurePermission())) return false
+    await LocalNotifications.schedule({
+      notifications: [{
+        id: 950,
+        title: 'Sakina',
+        body: 'Reminders are working, alhamdulillah. 🌙',
+        schedule: { at: new Date(Date.now() + 4000) },
+      }],
+    })
+    return true
+  } catch {
+    return false
+  }
+}
+
 export async function ensurePermission() {
   if (!isNative()) return false
   const cur = await LocalNotifications.checkPermissions()

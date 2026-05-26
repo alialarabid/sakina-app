@@ -2,23 +2,26 @@ import { useState } from 'react'
 import data from '../data/duas.json'
 import DhikrCard from '../components/DhikrCard.jsx'
 import { useSettings } from '../lib/settings.jsx'
+import { useT } from '../lib/i18n.js'
 
 export default function Duas() {
   const { settings } = useSettings()
+  const { t, lang } = useT()
   const showTranslation = settings.display === 'full'
   const [openId, setOpenId] = useState(null)
 
   const category = data.categories.find((c) => c.id === openId)
+  const countLabel = (n) => t(n > 1 ? 'duas.countP' : 'duas.count', { n })
 
   if (category) {
     return (
       <>
         <header className="screen-head">
           <button className="back" onClick={() => setOpenId(null)}>
-            <Chevron /> Du&#700;a
+            <Chevron /> {t('duas.title')}
           </button>
-          <h1 style={{ marginTop: 6 }}>{category.title}</h1>
-          <p className="ar" style={{ fontSize: '19px', marginTop: 4 }}>{category.titleAr}</p>
+          <h1 className="ar" style={{ marginTop: 6 }}>{category.titleAr}</h1>
+          {lang === 'en' && <p style={{ marginTop: 4, color: 'var(--ink-3)' }}>{category.title}</p>}
         </header>
 
         {category.items.map((item) => (
@@ -33,16 +36,16 @@ export default function Duas() {
   return (
     <>
       <header className="screen-head">
-        <h1>Du&#700;a</h1>
-        <p>Supplications for the moments of the day.</p>
+        <h1>{t('duas.title')}</h1>
+        <p>{t('duas.subtitle')}</p>
       </header>
 
       <div className="cat-grid">
         {data.categories.map((c) => (
           <button key={c.id} className="cat" onClick={() => setOpenId(c.id)}>
             <div className="cat-ar">{c.titleAr}</div>
-            <div className="cat-en">{c.title}</div>
-            <div className="cat-n">{c.items.length} du&#700;a{c.items.length > 1 ? 's' : ''}</div>
+            {lang === 'en' && <div className="cat-en">{c.title}</div>}
+            <div className="cat-n">{countLabel(c.items.length)}</div>
           </button>
         ))}
       </div>

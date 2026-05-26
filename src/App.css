@@ -39,6 +39,11 @@
 }
 .tab--active { color: var(--accent); }
 .tab:active { transform: scale(0.9); }
+.tab span { white-space: nowrap; }
+
+/* RTL: flip directional arrows for the Arabic interface */
+[dir='rtl'] .primary-card svg,
+[dir='rtl'] .back svg { transform: scaleX(-1); }
 
 /* ============================ Home ============================ */
 .hero {

@@ -3,9 +3,11 @@ import data from '../data/adhkar.json'
 import CounterRing from '../components/CounterRing.jsx'
 import ShareButton from '../components/ShareButton.jsx'
 import { useSettings } from '../lib/settings.jsx'
+import { useT } from '../lib/i18n.js'
 
 export default function Adhkar() {
   const { settings } = useSettings()
+  const { t } = useT()
   const showTranslation = settings.display === 'full'
   const items = data.items
   const total = items.length
@@ -41,10 +43,10 @@ export default function Adhkar() {
       <div className="complete">
         <div className="bloom" />
         <p className="ar complete-ar">تَقَبَّلَ اللّٰهُ</p>
-        <p className="complete-en">May Allah accept it from you.</p>
-        <p className="complete-note">You've completed the morning &amp; evening remembrance.</p>
+        <p className="complete-en">{t('adhkar.accept')}</p>
+        <p className="complete-note">{t('adhkar.done')}</p>
         <button className="btn-primary" onClick={() => { setFinished(false); setI(0); setCounts({}) }}>
-          Begin again
+          {t('adhkar.again')}
         </button>
       </div>
     )
@@ -53,8 +55,8 @@ export default function Adhkar() {
   return (
     <div className="reader" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       <header className="reader-head">
-        <span className="reader-title">{data.title}</span>
-        <span className="reader-pos">{i + 1} / {total}</span>
+        <span className="reader-title">{t('adhkar.title')}</span>
+        <span className="reader-pos" dir="ltr">{i + 1} / {total}</span>
       </header>
       <div className="reader-bar"><span style={{ width: `${((i + 1) / total) * 100}%` }} /></div>
 
@@ -62,7 +64,7 @@ export default function Adhkar() {
         <p className="ar reader-ar" style={{ fontSize: `calc(27px * var(--ar-scale))` }}>{cur.arabic}</p>
         {showTranslation && cur.translation && <p className="reader-tr">{cur.translation}</p>}
         <div className="reader-meta">
-          <span className="reader-ref">Hisn al-Muslim</span>
+          <span className="reader-ref">{t('ref.hisn')}</span>
           <ShareButton item={cur} />
         </div>
       </div>
@@ -94,7 +96,7 @@ export default function Adhkar() {
         </button>
       </div>
 
-      <p className="reader-hint">{done ? 'Tap the ring or → for the next' : cur.repeat > 1 ? `Tap ${cur.repeat}×` : 'Tap when done'}</p>
+      <p className="reader-hint">{done ? t('adhkar.tapNext') : cur.repeat > 1 ? t('adhkar.tapN', { n: cur.repeat }) : t('adhkar.tapDone')}</p>
     </div>
   )
 }

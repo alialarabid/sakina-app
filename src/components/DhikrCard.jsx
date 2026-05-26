@@ -1,8 +1,10 @@
 import ShareButton from './ShareButton.jsx'
+import { useT } from '../lib/i18n.js'
 
 // One unit of remembrance: Arabic (always), optional English, source, and an
 // optional tap-to-count repeat pill. Text is never altered here.
 export default function DhikrCard({ item, showTranslation, counter }) {
+  const { t } = useT()
   const done = counter && counter.count >= item.repeat
 
   return (
@@ -14,7 +16,7 @@ export default function DhikrCard({ item, showTranslation, counter }) {
       )}
 
       <div className="meta">
-        <span className="ref">Hisn al-Muslim</span>
+        <span className="ref">{t('ref.hisn')}</span>
 
         <div className="meta-actions">
           <ShareButton item={item} />

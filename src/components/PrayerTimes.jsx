@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useSettings } from '../lib/settings.jsx'
+import { useT } from '../lib/i18n.js'
 import {
   computeTimes, dayList, nextPrayer, currentPrayerKey, fmtTime, countdown, locate,
 } from '../lib/prayer.js'
 
 export default function PrayerTimes() {
   const { settings, update } = useSettings()
+  const { t } = useT()
   const { coords, calcMethod, madhhab } = settings
   const [now, setNow] = useState(new Date())
   const [status, setStatus] = useState('idle') // idle | locating | denied | error
@@ -28,19 +30,17 @@ export default function PrayerTimes() {
 
   if (!coords) {
     const msg =
-      status === 'denied'
-        ? 'Location was blocked. Allow it in your browser to see prayer times.'
-        : status === 'error'
-          ? "Couldn't get your location — try again."
-          : 'Share your location to see today’s prayer times.'
+      status === 'denied' ? t('prayer.denied')
+        : status === 'error' ? t('prayer.error')
+          : t('prayer.share')
     return (
       <section className="prayer-prompt">
         <div>
-          <div className="pp-title">Prayer times</div>
+          <div className="pp-title">{t('prayer.title')}</div>
           <div className="pp-sub">{msg}</div>
         </div>
         <button className="btn-primary" onClick={enable} disabled={status === 'locating'}>
-          {status === 'locating' ? 'Locating…' : 'Enable'}
+          {status === 'locating' ? t('prayer.locating') : t('prayer.enable')}
         </button>
       </section>
     )
@@ -54,10 +54,10 @@ export default function PrayerTimes() {
   return (
     <section className="prayer">
       <div className="next-prayer">
-        <span className="np-label">Next prayer</span>
-        <span className="np-name">{next.name}</span>
+        <span className="np-label">{t('prayer.next')}</span>
+        <span className="np-name">{t('p.' + next.key)}</span>
         <span className="np-time">{fmtTime(next.time)}</span>
-        <span className="np-count">in {countdown(next.time, now)}</span>
+        <span className="np-count">{t('prayer.in', { t: countdown(next.time, now) })}</span>
       </div>
 
       <div className="prayer-list">
@@ -71,7 +71,7 @@ export default function PrayerTimes() {
               (p.minor ? ' minor' : '')
             }
           >
-            <span className="pr-name">{p.label}</span>
+            <span className="pr-name">{t('p.' + p.key)}</span>
             <span className="pr-time">{fmtTime(p.time)}</span>
           </div>
         ))}

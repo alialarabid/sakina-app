@@ -6,6 +6,7 @@ const SettingsContext = createContext(null)
 // display: 'arabic' (Arabic only) | 'translit' (+ transliteration) | 'full' (+ translation)
 const DEFAULTS = {
   theme: 'system',   // 'light' | 'dark' | 'system'
+  uiLang: 'en',      // 'en' | 'ar' — interface language (drives RTL)
   display: 'full',
   fontScale: 1,      // 0.9 – 1.4, multiplies Arabic size
   // Prayer times
@@ -32,6 +33,10 @@ export function SettingsProvider({ children }) {
     save('settings', settings)
     document.documentElement.setAttribute('data-theme', resolveTheme(settings.theme))
     document.documentElement.style.setProperty('--ar-scale', String(settings.fontScale))
+    // Interface language + direction
+    const ar = settings.uiLang === 'ar'
+    document.documentElement.lang = ar ? 'ar' : 'en'
+    document.documentElement.dir = ar ? 'rtl' : 'ltr'
   }, [settings])
 
   // React to OS theme changes while on 'system'.

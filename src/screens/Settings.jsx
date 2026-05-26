@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { useSettings } from '../lib/settings.jsx'
+import { useT } from '../lib/i18n.js'
 import { CALC_METHODS, locate } from '../lib/prayer.js'
-import { isNative } from '../lib/notifications.js'
+import { isNative, sendTest } from '../lib/notifications.js'
 
 export default function Settings() {
   const { settings, update } = useSettings()
+  const { t } = useT()
   const [locStatus, setLocStatus] = useState('idle')
+  const [tested, setTested] = useState(false)
 
   const useMyLocation = async () => {
     setLocStatus('locating')
@@ -17,23 +20,40 @@ export default function Settings() {
     }
   }
 
+  const fireTest = async () => {
+    await sendTest()
+    setTested(true)
+    setTimeout(() => setTested(false), 2500)
+  }
+
   const clampScale = (next) => Math.min(1.4, Math.max(0.9, Math.round(next * 10) / 10))
 
   return (
     <>
       <header className="screen-head">
-        <h1>Settings</h1>
+        <h1>{t('set.title')}</h1>
       </header>
 
       <div className="setting">
         <div>
-          <div className="s-label">Theme</div>
-          <div className="s-sub">Follows your device by default</div>
+          <div className="s-label">{t('set.language')}</div>
+          <div className="s-sub">{t('set.languageSub')}</div>
         </div>
         <div className="segment">
-          {['system', 'light', 'dark'].map((t) => (
-            <button key={t} className={settings.theme === t ? 'on' : ''} onClick={() => update({ theme: t })}>
-              {t[0].toUpperCase() + t.slice(1)}
+          <button className={settings.uiLang !== 'ar' ? 'on' : ''} onClick={() => update({ uiLang: 'en' })}>{t('lang.en')}</button>
+          <button className={settings.uiLang === 'ar' ? 'on' : ''} onClick={() => update({ uiLang: 'ar' })}>{t('lang.ar')}</button>
+        </div>
+      </div>
+
+      <div className="setting">
+        <div>
+          <div className="s-label">{t('set.theme')}</div>
+          <div className="s-sub">{t('set.themeSub')}</div>
+        </div>
+        <div className="segment">
+          {['system', 'light', 'dark'].map((k) => (
+            <button key={k} className={settings.theme === k ? 'on' : ''} onClick={() => update({ theme: k })}>
+              {t('theme.' + k)}
             </button>
           ))}
         </div>
@@ -41,22 +61,18 @@ export default function Settings() {
 
       <div className="setting">
         <div>
-          <div className="s-label">Display</div>
-          <div className="s-sub">Show English translation under the Arabic</div>
+          <div className="s-label">{t('set.translation')}</div>
+          <div className="s-sub">{t('set.translationSub')}</div>
         </div>
         <div className="segment">
-          <button className={settings.display === 'arabic' ? 'on' : ''} onClick={() => update({ display: 'arabic' })}>
-            Arabic
-          </button>
-          <button className={settings.display === 'full' ? 'on' : ''} onClick={() => update({ display: 'full' })}>
-            + English
-          </button>
+          <button className={settings.display === 'arabic' ? 'on' : ''} onClick={() => update({ display: 'arabic' })}>{t('set.transOff')}</button>
+          <button className={settings.display === 'full' ? 'on' : ''} onClick={() => update({ display: 'full' })}>{t('set.transOn')}</button>
         </div>
       </div>
 
       <div className="setting">
         <div>
-          <div className="s-label">Arabic size</div>
+          <div className="s-label">{t('set.size')}</div>
           <div className="s-sub">{Math.round(settings.fontScale * 100)}%</div>
         </div>
         <div className="segment">
@@ -65,33 +81,29 @@ export default function Settings() {
         </div>
       </div>
 
-      <h2 className="settings-section">Prayer times</h2>
+      <h2 className="settings-section">{t('set.prayer')}</h2>
 
       <div className="setting">
         <div>
-          <div className="s-label">Location</div>
+          <div className="s-label">{t('set.location')}</div>
           <div className="s-sub">
-            {locStatus === 'locating' ? 'Locating…'
-              : locStatus === 'denied' ? 'Permission blocked — allow location in your browser'
-              : locStatus === 'error' ? "Couldn't get location — try again"
-              : settings.coords ? 'Location set' : 'Not set'}
+            {locStatus === 'locating' ? t('prayer.locating')
+              : locStatus === 'denied' ? t('prayer.denied')
+              : locStatus === 'error' ? t('prayer.error')
+              : settings.coords ? t('set.locSet') : t('set.locNot')}
           </div>
         </div>
         <button className="link-btn" onClick={useMyLocation} disabled={locStatus === 'locating'}>
-          {settings.coords ? 'Update' : 'Use my location'}
+          {settings.coords ? t('set.locUpdate') : t('set.locUse')}
         </button>
       </div>
 
       <div className="setting">
         <div>
-          <div className="s-label">Calculation method</div>
-          <div className="s-sub">How prayer times are computed</div>
+          <div className="s-label">{t('set.calc')}</div>
+          <div className="s-sub">{t('set.calcSub')}</div>
         </div>
-        <select
-          className="select"
-          value={settings.calcMethod}
-          onChange={(e) => update({ calcMethod: e.target.value })}
-        >
+        <select className="select" value={settings.calcMethod} onChange={(e) => update({ calcMethod: e.target.value })}>
           {Object.entries(CALC_METHODS).map(([k, label]) => (
             <option key={k} value={k}>{label}</option>
           ))}
@@ -100,64 +112,57 @@ export default function Settings() {
 
       <div className="setting">
         <div>
-          <div className="s-label">Asr (madhhab)</div>
-          <div className="s-sub">Hanafi makes Asr later</div>
+          <div className="s-label">{t('set.asr')}</div>
+          <div className="s-sub">{t('set.asrSub')}</div>
         </div>
         <div className="segment">
-          <button className={settings.madhhab === 'shafi' ? 'on' : ''} onClick={() => update({ madhhab: 'shafi' })}>Standard</button>
-          <button className={settings.madhhab === 'hanafi' ? 'on' : ''} onClick={() => update({ madhhab: 'hanafi' })}>Hanafi</button>
+          <button className={settings.madhhab === 'shafi' ? 'on' : ''} onClick={() => update({ madhhab: 'shafi' })}>{t('asr.standard')}</button>
+          <button className={settings.madhhab === 'hanafi' ? 'on' : ''} onClick={() => update({ madhhab: 'hanafi' })}>{t('asr.hanafi')}</button>
         </div>
       </div>
 
-      <h2 className="settings-section">Reminders</h2>
+      <h2 className="settings-section">{t('set.reminders')}</h2>
 
       <div className="setting">
         <div>
-          <div className="s-label">Prayer reminders</div>
-          <div className="s-sub">A notification at each prayer time</div>
+          <div className="s-label">{t('set.remPrayer')}</div>
+          <div className="s-sub">{t('set.remPrayerSub')}</div>
         </div>
         <div className="segment">
-          <button className={settings.remindPrayers ? 'on' : ''} onClick={() => update({ remindPrayers: true })}>On</button>
-          <button className={!settings.remindPrayers ? 'on' : ''} onClick={() => update({ remindPrayers: false })}>Off</button>
+          <button className={settings.remindPrayers ? 'on' : ''} onClick={() => update({ remindPrayers: true })}>{t('set.on')}</button>
+          <button className={!settings.remindPrayers ? 'on' : ''} onClick={() => update({ remindPrayers: false })}>{t('set.off')}</button>
         </div>
       </div>
 
       <div className="setting">
         <div>
-          <div className="s-label">Daily dhikr nudge</div>
-          <div className="s-sub">A gentle reminder each evening</div>
+          <div className="s-label">{t('set.remDhikr')}</div>
+          <div className="s-sub">{t('set.remDhikrSub')}</div>
         </div>
         <div className="segment">
-          <button className={settings.remindDhikr ? 'on' : ''} onClick={() => update({ remindDhikr: true })}>On</button>
-          <button className={!settings.remindDhikr ? 'on' : ''} onClick={() => update({ remindDhikr: false })}>Off</button>
+          <button className={settings.remindDhikr ? 'on' : ''} onClick={() => update({ remindDhikr: true })}>{t('set.on')}</button>
+          <button className={!settings.remindDhikr ? 'on' : ''} onClick={() => update({ remindDhikr: false })}>{t('set.off')}</button>
         </div>
       </div>
 
-      {!isNative() && (
-        <div className="note">
-          Reminders fire in the <strong>installed app</strong>. On the web they’re saved as a
-          preference but won’t send notifications.
+      {isNative() && (
+        <div className="setting">
+          <div>
+            <div className="s-label">{tested ? t('set.testSent') : t('set.test')}</div>
+          </div>
+          <button className="link-btn" onClick={fireTest} disabled={tested}>{t('prayer.enable')}</button>
         </div>
       )}
 
-      <div className="note">
-        <strong>About the text.</strong> All Arabic and English come verbatim from
-        <em> Hisn al-Muslim (Fortress of the Muslim)</em>, compiled by Saʼid bin Ali
-        al-Qahtani, via the hisnmuslim.com data set. Nothing in the adhkar or duʼa is
-        generated or paraphrased.
-      </div>
+      {!isNative() && <div className="note">{t('set.remNote')}</div>}
 
-      <div className="note" style={{ marginTop: 12 }}>
-        <strong>Coming next.</strong> Transliteration (once sourced from a verified
-        reference), prayer times &amp; reminders, and Qibla — planned for the native
-        version.
-      </div>
+      <div className="note" style={{ marginTop: 12 }}>{t('set.aboutText')}</div>
 
       <p className="app-foot">
-        <a href="/privacy.html" target="_blank" rel="noopener" style={{ color: 'var(--accent)' }}>Privacy</a>
+        <a href="/privacy.html" target="_blank" rel="noopener" style={{ color: 'var(--accent)' }}>{t('set.privacy')}</a>
         <br /><br />
         Sakina · سكينة<br />
-        Made as a sadaqah jariyah. May it benefit you.
+        {t('set.madeAs')}
       </p>
     </>
   )

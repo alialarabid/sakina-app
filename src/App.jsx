@@ -6,15 +6,16 @@ import Tasbih from './screens/Tasbih.jsx'
 import Settings from './screens/Settings.jsx'
 import { daypart } from './lib/time.js'
 import { useSettings } from './lib/settings.jsx'
+import { useT } from './lib/i18n.js'
 import { reschedule } from './lib/notifications.js'
 import './App.css'
 
 const TABS = [
-  { id: 'home', label: 'Home', icon: HomeIcon, Screen: Home },
-  { id: 'adhkar', label: 'Adhkar', icon: SunMoonIcon, Screen: Adhkar },
-  { id: 'duas', label: 'Duʼa', icon: HandsIcon, Screen: Duas },
-  { id: 'tasbih', label: 'Tasbih', icon: BeadsIcon, Screen: Tasbih },
-  { id: 'settings', label: 'Settings', icon: GearIcon, Screen: Settings },
+  { id: 'home', key: 'tab.home', icon: HomeIcon, Screen: Home },
+  { id: 'adhkar', key: 'tab.adhkar', icon: SunMoonIcon, Screen: Adhkar },
+  { id: 'duas', key: 'tab.duas', icon: HandsIcon, Screen: Duas },
+  { id: 'tasbih', key: 'tab.tasbih', icon: BeadsIcon, Screen: Tasbih },
+  { id: 'settings', key: 'tab.settings', icon: GearIcon, Screen: Settings },
 ]
 
 function initialTab() {
@@ -25,7 +26,8 @@ function initialTab() {
 export default function App() {
   const [tab, setTab] = useState(initialTab)
   const { settings } = useSettings()
-  const Active = TABS.find((t) => t.id === tab).Screen
+  const { t } = useT()
+  const Active = TABS.find((x) => x.id === tab).Screen
 
   // Keep the time-of-day atmosphere fresh.
   useEffect(() => {
@@ -57,18 +59,18 @@ export default function App() {
       </main>
 
       <nav className="tabbar" aria-label="Sections">
-        {TABS.map((t) => {
-          const Icon = t.icon
-          const active = t.id === tab
+        {TABS.map((item) => {
+          const Icon = item.icon
+          const active = item.id === tab
           return (
             <button
-              key={t.id}
+              key={item.id}
               className={'tab' + (active ? ' tab--active' : '')}
-              onClick={() => setTab(t.id)}
+              onClick={() => setTab(item.id)}
               aria-current={active ? 'page' : undefined}
             >
               <Icon />
-              <span>{t.label}</span>
+              <span>{t(item.key)}</span>
             </button>
           )
         })}

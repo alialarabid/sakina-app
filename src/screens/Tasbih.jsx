@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { load, save, todayKey } from '../lib/storage.js'
 import { promptForToday } from '../data/gratitude.js'
 import CounterRing from '../components/CounterRing.jsx'
+import { useT } from '../lib/i18n.js'
 
 const PHRASES = [
   { key: 'subhanallah', ar: 'سُبْحَانَ اللَّه', en: 'SubhanAllah' },
@@ -14,6 +15,7 @@ const CYCLE = 33
 const dayStoreKey = () => 'tasbih:' + todayKey()
 
 export default function Tasbih() {
+  const { t } = useT()
   const [phrase, setPhrase] = useState(PHRASES[0].key)
   const [byPhrase, setByPhrase] = useState(() => load(dayStoreKey(), {}))
 
@@ -47,7 +49,7 @@ export default function Tasbih() {
         center={
           <span className="tasbih-num">
             {count}
-            <small>{cycles > 0 ? `${cycles} × ${CYCLE}` : `of ${CYCLE}`}</small>
+            <small>{cycles > 0 ? t('tasbih.cycles', { n: cycles, c: CYCLE }) : t('tasbih.ofCycle', { c: CYCLE })}</small>
           </span>
         }
       />
@@ -60,11 +62,11 @@ export default function Tasbih() {
         ))}
       </div>
 
-      <button className="link-btn" onClick={reset} disabled={!count}>Reset {active.en}</button>
-      <div className="daily-total">Today, all dhikr: {total}</div>
+      <button className="link-btn" onClick={reset} disabled={!count}>{t('tasbih.reset', { x: active.en })}</button>
+      <div className="daily-total">{t('tasbih.today', { n: total })}</div>
 
       <div className="gratitude">
-        <div className="label">Moment of shukr</div>
+        <div className="label">{t('tasbih.shukr')}</div>
         <p>{promptForToday()}</p>
       </div>
     </div>

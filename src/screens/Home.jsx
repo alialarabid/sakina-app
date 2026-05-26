@@ -1,7 +1,8 @@
 import adhkar from '../data/adhkar.json'
 import PrayerTimes from '../components/PrayerTimes.jsx'
 import { useSettings } from '../lib/settings.jsx'
-import { greeting, adhkarMood, hijriDate, hijriDateAr, gregorianDate } from '../lib/time.js'
+import { useT } from '../lib/i18n.js'
+import { daypart, adhkarMood, hijriDate, hijriDateAr, gregorianDate } from '../lib/time.js'
 
 // A calm, authentic dhikr to feature, rotating by day (from the verified set).
 function featured() {
@@ -12,6 +13,7 @@ function featured() {
 
 export default function Home({ go }) {
   const { settings } = useSettings()
+  const { t } = useT()
   const showTranslation = settings.display === 'full'
   const mood = adhkarMood()
   const feat = featured()
@@ -20,9 +22,9 @@ export default function Home({ go }) {
     <>
       <section className="hero">
         <Ornament />
-        <p className="hero-eyebrow">{greeting()}</p>
+        <p className="hero-eyebrow">{t('greeting.' + daypart())}</p>
         <h1 className="hero-salam ar">السَّلامُ عَلَيْكُم</h1>
-        <p className="hero-sub">Peace be upon you</p>
+        <p className="hero-sub">{t('home.peace')}</p>
         <div className="hero-dates">
           <span className="ar">{hijriDateAr()}</span>
           <span className="dot">·</span>
@@ -35,8 +37,8 @@ export default function Home({ go }) {
 
       <button className="primary-card" onClick={() => go('adhkar')}>
         <div>
-          <div className="pc-label">{mood === 'morning' ? 'Morning remembrance' : 'Evening remembrance'}</div>
-          <div className="pc-sub">Adhkar as-Sabah wal-Masa · {adhkar.items.length} duʼas</div>
+          <div className="pc-label">{mood === 'morning' ? t('home.morning') : t('home.evening')}</div>
+          <div className="pc-sub">{t('home.adhkarSub', { n: adhkar.items.length })}</div>
         </div>
         <Arrow />
       </button>
@@ -44,22 +46,22 @@ export default function Home({ go }) {
       <div className="quick-row">
         <button className="quick" onClick={() => go('duas')}>
           <span className="q-ar ar">دُعَاء</span>
-          <span className="q-en">Duʼa</span>
+          <span className="q-en">{t('tab.duas')}</span>
         </button>
         <button className="quick" onClick={() => go('tasbih')}>
           <span className="q-ar ar">تَسْبِيح</span>
-          <span className="q-en">Tasbih</span>
+          <span className="q-en">{t('tab.tasbih')}</span>
         </button>
       </div>
 
       <button className="feature" onClick={() => go('adhkar')}>
-        <div className="feature-label">Remembrance of the day</div>
+        <div className="feature-label">{t('home.featured')}</div>
         <p className="ar feature-ar">{feat.arabic}</p>
         {showTranslation && <p className="feature-tr">{feat.translation}</p>}
       </button>
 
       <p className="app-foot">
-        Sakina · سكينة<br />Made as a sadaqah jariyah.
+        Sakina · سكينة<br />{t('home.foot')}
       </p>
     </>
   )
