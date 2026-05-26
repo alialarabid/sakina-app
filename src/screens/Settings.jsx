@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useSettings } from '../lib/settings.jsx'
 import { CALC_METHODS, locate } from '../lib/prayer.js'
+import { isNative } from '../lib/notifications.js'
 
 export default function Settings() {
   const { settings, update } = useSettings()
@@ -107,6 +108,37 @@ export default function Settings() {
           <button className={settings.madhhab === 'hanafi' ? 'on' : ''} onClick={() => update({ madhhab: 'hanafi' })}>Hanafi</button>
         </div>
       </div>
+
+      <h2 className="settings-section">Reminders</h2>
+
+      <div className="setting">
+        <div>
+          <div className="s-label">Prayer reminders</div>
+          <div className="s-sub">A notification at each prayer time</div>
+        </div>
+        <div className="segment">
+          <button className={settings.remindPrayers ? 'on' : ''} onClick={() => update({ remindPrayers: true })}>On</button>
+          <button className={!settings.remindPrayers ? 'on' : ''} onClick={() => update({ remindPrayers: false })}>Off</button>
+        </div>
+      </div>
+
+      <div className="setting">
+        <div>
+          <div className="s-label">Daily dhikr nudge</div>
+          <div className="s-sub">A gentle reminder each evening</div>
+        </div>
+        <div className="segment">
+          <button className={settings.remindDhikr ? 'on' : ''} onClick={() => update({ remindDhikr: true })}>On</button>
+          <button className={!settings.remindDhikr ? 'on' : ''} onClick={() => update({ remindDhikr: false })}>Off</button>
+        </div>
+      </div>
+
+      {!isNative() && (
+        <div className="note">
+          Reminders fire in the <strong>installed app</strong>. On the web they’re saved as a
+          preference but won’t send notifications.
+        </div>
+      )}
 
       <div className="note">
         <strong>About the text.</strong> All Arabic and English come verbatim from

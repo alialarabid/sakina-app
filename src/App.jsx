@@ -5,6 +5,8 @@ import Duas from './screens/Duas.jsx'
 import Tasbih from './screens/Tasbih.jsx'
 import Settings from './screens/Settings.jsx'
 import { daypart } from './lib/time.js'
+import { useSettings } from './lib/settings.jsx'
+import { reschedule } from './lib/notifications.js'
 import './App.css'
 
 const TABS = [
@@ -22,6 +24,7 @@ function initialTab() {
 
 export default function App() {
   const [tab, setTab] = useState(initialTab)
+  const { settings } = useSettings()
   const Active = TABS.find((t) => t.id === tab).Screen
 
   // Keep the time-of-day atmosphere fresh.
@@ -31,6 +34,18 @@ export default function App() {
     const t = setInterval(apply, 60_000)
     return () => clearInterval(t)
   }, [])
+
+  // (Re)schedule native reminders whenever the relevant prefs change.
+  // No-ops on the web; fires real local notifications in the installed app.
+  useEffect(() => {
+    reschedule(settings)
+  }, [
+    settings.remindPrayers,
+    settings.remindDhikr,
+    settings.coords,
+    settings.calcMethod,
+    settings.madhhab,
+  ])
 
   // Let any screen request a tab change (e.g. Home quick links).
   const go = (id) => setTab(id)

@@ -12,6 +12,9 @@ const DEFAULTS = {
   coords: null,      // { lat, lng } once the user shares location
   calcMethod: 'UmmAlQura',
   madhhab: 'shafi',  // 'shafi' | 'hanafi' (Asr calculation)
+  // Reminders (fire only in the installed native app)
+  remindPrayers: false,
+  remindDhikr: false,
 }
 
 function resolveTheme(theme) {

@@ -1,0 +1,10 @@
+{
+  "appId": "com.alialarabid.sakina",
+  "appName": "Sakina",
+  "webDir": "dist",
+  "plugins": {
+    "LocalNotifications": {
+      "iconColor": "#0e6b54"
+    }
+  }
+}
