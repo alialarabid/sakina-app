@@ -1,5 +1,6 @@
 import adhkar from '../data/adhkar.json'
 import PrayerTimes from '../components/PrayerTimes.jsx'
+import { useSettings } from '../lib/settings.jsx'
 import { greeting, adhkarMood, hijriDate, hijriDateAr, gregorianDate } from '../lib/time.js'
 
 // A calm, authentic dhikr to feature, rotating by day (from the verified set).
@@ -10,6 +11,8 @@ function featured() {
 }
 
 export default function Home({ go }) {
+  const { settings } = useSettings()
+  const showTranslation = settings.display === 'full'
   const mood = adhkarMood()
   const feat = featured()
 
@@ -52,7 +55,7 @@ export default function Home({ go }) {
       <button className="feature" onClick={() => go('adhkar')}>
         <div className="feature-label">Remembrance of the day</div>
         <p className="ar feature-ar">{feat.arabic}</p>
-        <p className="feature-tr">{feat.translation}</p>
+        {showTranslation && <p className="feature-tr">{feat.translation}</p>}
       </button>
 
       <p className="app-foot">
