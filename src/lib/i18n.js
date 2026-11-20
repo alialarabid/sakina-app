@@ -15,9 +15,10 @@ export const STRINGS = {
 
     'prayer.title': 'Prayer times', 'prayer.enable': 'Enable', 'prayer.locating': 'Locating…',
     'prayer.share': 'Share your location to see today’s prayer times.',
-    'prayer.denied': 'Location was blocked. Allow it in your browser to see prayer times.',
+    'prayer.denied': 'Location was blocked. Allow it in your phone or browser settings to see prayer times.',
     'prayer.error': "Couldn't get your location — try again.",
     'prayer.next': 'Next prayer', 'prayer.in': 'in {t}',
+    'notif.prayer': 'It’s time for {p}.', 'notif.dhikrTitle': 'A moment of remembrance', 'notif.dhikrBody': 'Take a minute for dhikr and a breath of gratitude.',
     'p.fajr': 'Fajr', 'p.sunrise': 'Sunrise', 'p.dhuhr': 'Dhuhr', 'p.asr': 'Asr', 'p.maghrib': 'Maghrib', 'p.isha': 'Isha',
 
     'adhkar.title': 'Morning & Evening',
@@ -67,9 +68,10 @@ export const STRINGS = {
 
     'prayer.title': 'مواقيت الصلاة', 'prayer.enable': 'تفعيل', 'prayer.locating': 'جارٍ تحديد الموقع…',
     'prayer.share': 'شارك موقعك لعرض مواقيت الصلاة اليوم.',
-    'prayer.denied': 'تم حظر الموقع. فعّله في المتصفح لعرض المواقيت.',
+    'prayer.denied': 'تم حظر الموقع. فعّله من إعدادات الهاتف أو المتصفح لعرض المواقيت.',
     'prayer.error': 'تعذّر تحديد الموقع — حاول مرة أخرى.',
     'prayer.next': 'الصلاة القادمة', 'prayer.in': 'بعد {t}',
+    'notif.prayer': 'حان الآن وقت صلاة {p}.', 'notif.dhikrTitle': 'لحظة ذِكر', 'notif.dhikrBody': 'خذ دقيقة للذِّكر ونَفَسًا من الامتنان.',
     'p.fajr': 'الفجر', 'p.sunrise': 'الشروق', 'p.dhuhr': 'الظهر', 'p.asr': 'العصر', 'p.maghrib': 'المغرب', 'p.isha': 'العشاء',
 
     'adhkar.title': 'الصباح والمساء',

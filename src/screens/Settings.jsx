@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useSettings } from '../lib/settings.jsx'
 import { useT } from '../lib/i18n.js'
 import { CALC_METHODS, locate } from '../lib/prayer.js'
-import { isNative, sendTest } from '../lib/notifications.js'
+import { isNative, sendTest, askExact, ensurePermission } from '../lib/notifications.js'
 
 export default function Settings() {
   const { settings, update } = useSettings()
@@ -18,6 +18,12 @@ export default function Settings() {
     } catch (e) {
       setLocStatus(e && e.code === 1 ? 'denied' : 'error')
     }
+  }
+
+  // Ask one thing at a time: notifications first, then exact alarms.
+  const turnOnPrayerReminders = async () => {
+    if (isNative() && (await ensurePermission())) await askExact()
+    update({ remindPrayers: true })
   }
 
   const fireTest = async () => {
@@ -129,7 +135,7 @@ export default function Settings() {
           <div className="s-sub">{t('set.remPrayerSub')}</div>
         </div>
         <div className="segment">
-          <button className={settings.remindPrayers ? 'on' : ''} onClick={() => update({ remindPrayers: true })}>{t('set.on')}</button>
+          <button className={settings.remindPrayers ? 'on' : ''} onClick={turnOnPrayerReminders}>{t('set.on')}</button>
           <button className={!settings.remindPrayers ? 'on' : ''} onClick={() => update({ remindPrayers: false })}>{t('set.off')}</button>
         </div>
       </div>

@@ -1,3 +1,5 @@
+import { Capacitor } from '@capacitor/core'
+import { Geolocation } from '@capacitor/geolocation'
 import { Coordinates, CalculationMethod, PrayerTimes, Madhab, Prayer } from 'adhan'
 
 // Calculation methods we expose (label shown in Settings).
@@ -74,8 +76,28 @@ export function countdown(target, now = new Date()) {
   return h > 0 ? `${h}h ${m}m` : `${m}m`
 }
 
-// Promise wrapper around the Geolocation API.
-export function locate() {
+// Get the user's rough location once. The Android app uses the native
+// location service (the WebView's own geolocation is unreliable there);
+// the web uses the browser API. Errors use code 1 for "denied".
+export async function locate() {
+  if (Capacitor.isNativePlatform()) {
+    try {
+      let perm = await Geolocation.checkPermissions()
+      if (perm.location !== 'granted' && perm.coarseLocation !== 'granted') {
+        perm = await Geolocation.requestPermissions({ permissions: ['coarseLocation'] })
+      }
+      if (perm.location !== 'granted' && perm.coarseLocation !== 'granted') {
+        throw Object.assign(new Error('denied'), { code: 1 })
+      }
+      const pos = await Geolocation.getCurrentPosition({
+        enableHighAccuracy: false, timeout: 15000, maximumAge: 3600000,
+      })
+      return { lat: pos.coords.latitude, lng: pos.coords.longitude }
+    } catch (e) {
+      if (e?.code === 1 || /denied/i.test(e?.message || '')) throw Object.assign(new Error('denied'), { code: 1 })
+      throw e
+    }
+  }
   return new Promise((resolve, reject) => {
     if (!navigator.geolocation) return reject(new Error('unsupported'))
     navigator.geolocation.getCurrentPosition(

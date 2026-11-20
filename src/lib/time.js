@@ -28,13 +28,23 @@ export function adhkarMood(d = new Date()) {
 }
 
 // Hijri date via the built-in Islamic calendar — no API, works offline.
+// Android WebView ships trimmed ICU data: English month names come out as
+// Gregorian ones ("June 10, 1448 BC"). So take only the numbers from Intl and
+// name the month ourselves.
+const HIJRI_MONTHS = [
+  'Muharram', 'Safar', 'Rabiʻ al-Awwal', 'Rabiʻ al-Thani', 'Jumada al-Ula',
+  'Jumada al-Akhirah', 'Rajab', 'Shaʻban', 'Ramadan', 'Shawwal',
+  'Dhu al-Qaʻdah', 'Dhu al-Hijjah',
+]
 export function hijriDate(d = new Date()) {
   try {
-    return new Intl.DateTimeFormat('en-TN-u-ca-islamic-umalqura', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    }).format(d)
+    const parts = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', {
+      day: 'numeric', month: 'numeric', year: 'numeric',
+    }).formatToParts(d)
+    const get = (t) => parseInt(parts.find((p) => p.type === t)?.value, 10)
+    const day = get('day'), month = get('month'), year = get('year')
+    if (!day || !month || !year) return ''
+    return `${day} ${HIJRI_MONTHS[month - 1]} ${year} AH`
   } catch {
     return ''
   }

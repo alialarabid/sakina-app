@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Home from './screens/Home.jsx'
 import Adhkar from './screens/Adhkar.jsx'
 import Duas from './screens/Duas.jsx'
@@ -7,7 +7,8 @@ import Settings from './screens/Settings.jsx'
 import { daypart } from './lib/time.js'
 import { useSettings } from './lib/settings.jsx'
 import { useT } from './lib/i18n.js'
-import { reschedule } from './lib/notifications.js'
+import { reschedule, isNative } from './lib/notifications.js'
+import { App as CapApp } from '@capacitor/app'
 import './App.css'
 
 const TABS = [
@@ -47,7 +48,26 @@ export default function App() {
     settings.coords,
     settings.calcMethod,
     settings.madhhab,
+    settings.uiLang,
   ])
+
+  // Android app: refresh the 7-day reminder window each time the app comes
+  // back, and make the system Back button go Home before it exits.
+  const tabRef = useRef(tab)
+  tabRef.current = tab
+  const settingsRef = useRef(settings)
+  settingsRef.current = settings
+  useEffect(() => {
+    if (!isNative()) return
+    const subs = [
+      CapApp.addListener('resume', () => reschedule(settingsRef.current)),
+      CapApp.addListener('backButton', () => {
+        if (tabRef.current !== 'home') setTab('home')
+        else CapApp.exitApp()
+      }),
+    ]
+    return () => subs.forEach((p) => p.then((h) => h.remove()))
+  }, [])
 
   // Let any screen request a tab change (e.g. Home quick links).
   const go = (id) => setTab(id)
