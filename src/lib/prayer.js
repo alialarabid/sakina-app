@@ -64,15 +64,17 @@ export function currentPrayerKey(coords, method, madhhab, now = new Date()) {
   return cp === Prayer.None ? null : cp
 }
 
-export function fmtTime(d) {
-  return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+export function fmtTime(d, lang = 'en') {
+  return d.toLocaleTimeString(lang === 'ar' ? 'ar-SA' : [], { hour: 'numeric', minute: '2-digit' })
 }
 
-export function countdown(target, now = new Date()) {
+const toArDigits = (s) => s.replace(/\d/g, (c) => '٠١٢٣٤٥٦٧٨٩'[c])
+export function countdown(target, now = new Date(), lang = 'en') {
   let ms = target - now
   if (ms < 0) ms = 0
   const h = Math.floor(ms / 3600000)
   const m = Math.floor((ms % 3600000) / 60000)
+  if (lang === 'ar') return toArDigits(h > 0 ? `${h} س ${m} د` : `${m} د`)
   return h > 0 ? `${h}h ${m}m` : `${m}m`
 }
 
@@ -89,9 +91,15 @@ export async function locate() {
       if (perm.location !== 'granted' && perm.coarseLocation !== 'granted') {
         throw Object.assign(new Error('denied'), { code: 1 })
       }
-      const pos = await Geolocation.getCurrentPosition({
-        enableHighAccuracy: false, timeout: 15000, maximumAge: 3600000,
-      })
+      // Fresh fix first (so travellers get the new city); if the phone
+      // can't get one, fall back to its last known position.
+      let pos
+      try {
+        pos = await Geolocation.getCurrentPosition({ enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 })
+      } catch (e) {
+        if (/denied/i.test(e?.message || '')) throw e
+        pos = await Geolocation.getCurrentPosition({ enableHighAccuracy: false, timeout: 10000, maximumAge: Infinity })
+      }
       return { lat: pos.coords.latitude, lng: pos.coords.longitude }
     } catch (e) {
       if (e?.code === 1 || /denied/i.test(e?.message || '')) throw Object.assign(new Error('denied'), { code: 1 })
@@ -103,7 +111,7 @@ export async function locate() {
     navigator.geolocation.getCurrentPosition(
       (pos) => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
       (err) => reject(err),
-      { enableHighAccuracy: false, timeout: 10000, maximumAge: 3600000 },
+      { enableHighAccuracy: false, timeout: 10000, maximumAge: 60000 },
     )
   })
 }

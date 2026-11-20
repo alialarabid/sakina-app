@@ -7,7 +7,7 @@ import {
 
 export default function PrayerTimes() {
   const { settings, update } = useSettings()
-  const { t } = useT()
+  const { t, lang } = useT()
   const { coords, calcMethod, madhhab } = settings
   const [now, setNow] = useState(new Date())
   const [status, setStatus] = useState('idle') // idle | locating | denied | error
@@ -56,8 +56,8 @@ export default function PrayerTimes() {
       <div className="next-prayer">
         <span className="np-label">{t('prayer.next')}</span>
         <span className="np-name">{t('p.' + next.key)}</span>
-        <span className="np-time">{fmtTime(next.time)}</span>
-        <span className="np-count">{t('prayer.in', { t: countdown(next.time, now) })}</span>
+        <span className="np-time">{fmtTime(next.time, lang)}</span>
+        <span className="np-count">{t('prayer.in', { t: countdown(next.time, now, lang) })}</span>
       </div>
 
       <div className="prayer-list">
@@ -72,7 +72,7 @@ export default function PrayerTimes() {
             }
           >
             <span className="pr-name">{t('p.' + p.key)}</span>
-            <span className="pr-time">{fmtTime(p.time)}</span>
+            <span className="pr-time">{fmtTime(p.time, lang)}</span>
           </div>
         ))}
       </div>

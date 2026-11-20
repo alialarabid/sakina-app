@@ -50,19 +50,20 @@ export function hijriDate(d = new Date()) {
   }
 }
 
-export function hijriDateAr(d = new Date()) {
+export function hijriDateAr(d = new Date(), withYear = false) {
   try {
     return new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura', {
       day: 'numeric',
       month: 'long',
+      ...(withYear ? { year: 'numeric' } : {}),
     }).format(d)
   } catch {
     return ''
   }
 }
 
-export function gregorianDate(d = new Date()) {
-  return new Intl.DateTimeFormat('en-US', {
+export function gregorianDate(d = new Date(), lang = 'en') {
+  return new Intl.DateTimeFormat(lang === 'ar' ? 'ar-SA-u-ca-gregory' : 'en-US', {
     weekday: 'long',
     day: 'numeric',
     month: 'long',

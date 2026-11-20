@@ -13,7 +13,7 @@ function featured() {
 
 export default function Home({ go }) {
   const { settings } = useSettings()
-  const { t } = useT()
+  const { t, lang } = useT()
   const showTranslation = settings.display === 'full'
   const mood = adhkarMood()
   const feat = featured()
@@ -26,11 +26,17 @@ export default function Home({ go }) {
         <h1 className="hero-salam ar">السَّلامُ عَلَيْكُم</h1>
         <p className="hero-sub">{t('home.peace')}</p>
         <div className="hero-dates">
-          <span className="ar">{hijriDateAr()}</span>
-          <span className="dot">·</span>
-          <span>{hijriDate()}</span>
+          {lang === 'ar' ? (
+            <span className="ar">{hijriDateAr(new Date(), true)}</span>
+          ) : (
+            <>
+              <span className="ar">{hijriDateAr()}</span>
+              <span className="dot">·</span>
+              <span>{hijriDate()}</span>
+            </>
+          )}
         </div>
-        <p className="hero-greg">{gregorianDate()}</p>
+        <p className="hero-greg">{gregorianDate(new Date(), lang)}</p>
       </section>
 
       <PrayerTimes />
